@@ -7,7 +7,7 @@ export default createStore({
   },
   mutations: {
     loadToDos(state, payload){
-      state.toDos = payload;
+      state.toDos = payload.splice(0, 20);
     },
     addNewToDo(state, payload){
       state.toDos.push(payload);
