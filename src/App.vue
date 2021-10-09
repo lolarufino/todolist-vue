@@ -22,7 +22,10 @@
           add task"
           />
         </button>
-        <button class="button">
+        <button
+          @click="updateValue(this.inputValue, this.index)"
+          class="button"
+        >
           <img
             class="button-image"
             src="https://i.ibb.co/zxJ9Z5Y/update.png"
@@ -33,8 +36,16 @@
     </div>
     <ul class="list">
       <li v-for="toDo in toDos" class="element-list">
-        {{ toDo.title
-        }}<button
+        <input type="checkbox" @change="completeToDo(toDo)" />
+        <button
+          class="update-button"
+          @click="
+            setInputValue({ title: toDo.title }), setIndex({ id: toDo.id })
+          "
+          :style="getTextDecoration(toDo)"
+        >
+          {{ toDo.title }}</button
+        ><button
           @click="deleteToDoChosen({ title: toDo.title })"
           class="delete-button"
         >
@@ -59,16 +70,46 @@ export default defineComponent({
     ...mapState(["toDos"]),
   },
   methods: {
-    ...mapActions(["fetchToDos", "saveToDo", "deleteToDoChosen"]),
+    ...mapActions([
+      "fetchToDos",
+      "saveToDo",
+      "deleteToDoChosen",
+      "updateToDoChosen",
+      "changeStatus",
+    ]),
     saveValue() {
       if (this.inputValue !== "") {
         this.saveToDo(this.inputValue);
+        this.inputValue = "";
       }
+    },
+    setInputValue(toDoToUpdate: any) {
+      this.inputValue = toDoToUpdate.title;
+    },
+    setIndex(toDoIndex: any) {
+      this.index = toDoIndex.id;
+    },
+    updateValue(inputValue: string, index: number) {
+      this.updateToDoChosen({ inputValue, index });
+      this.inputValue = "";
+      this.index = null;
+    },
+    completeToDo(toDo: any) {
+      this.changeStatus({
+        title: toDo.title,
+        completed: toDo.completed,
+        index: toDo.id,
+      });
+    },
+    getTextDecoration(toDo: any) {
+      const textDecoration = toDo.completed === false ? "none" : "line-through";
+      return { textDecoration };
     },
   },
   data() {
     return {
       inputValue: "",
+      index: null,
     };
   },
   mounted() {
@@ -146,6 +187,7 @@ body {
     font-size: 15px;
     width: 70%;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     .element-list {
       display: flex;
@@ -158,6 +200,11 @@ body {
       padding: 20px;
       color: black;
       border-radius: 5px;
+      .update-button {
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+      }
       .delete-button {
         background-color: transparent;
         border: 0;
