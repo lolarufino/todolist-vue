@@ -34,6 +34,15 @@
         </button>
       </div>
     </div>
+    <div class="filter-wrapper">
+      <button class="filter-button" @click="showAll()">
+        Show All ({{ this.toDos.length }})</button
+      ><button class="filter-button" @click="showNotCompleted()">
+        Not completed ({{ this.notCompletedToDos.length }})</button
+      ><button class="filter-button" @click="showCompleted(toDos)">
+        Completed ({{ this.completedToDos.length }})
+      </button>
+    </div>
     <ul class="list">
       <li v-for="toDo in toDos" class="element-list">
         <input type="checkbox" @change="completeToDo(toDo)" />
@@ -67,7 +76,7 @@ import { mapActions, mapState } from "vuex";
 export default defineComponent({
   name: "App",
   computed: {
-    ...mapState(["toDos"]),
+    ...mapState(["toDos", "completedToDos", "notCompletedToDos"]),
   },
   methods: {
     ...mapActions([
@@ -104,6 +113,15 @@ export default defineComponent({
     getTextDecoration(toDo: any) {
       const textDecoration = toDo.completed === false ? "none" : "line-through";
       return { textDecoration };
+    },
+    showAll() {
+      this.toDos = this.toDos;
+    },
+    showNotCompleted() {
+      this.toDos = this.notCompletedToDos;
+    },
+    showCompleted() {
+      this.toDos = this.completedToDos;
     },
   },
   data() {
@@ -182,6 +200,23 @@ body {
       }
     }
   }
+  .filter-wrapper {
+    display: flex;
+    .filter-button {
+      font-family: "Exo 2", sans-serif;
+      background-color: #7392ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 10px;
+      margin: 10px;
+      &:hover {
+        background-color: white;
+        color: #7392ff;
+      }
+    }
+  }
   .list {
     font-family: "Exo 2", sans-serif;
     font-size: 15px;
@@ -200,6 +235,9 @@ body {
       padding: 20px;
       color: black;
       border-radius: 5px;
+      &:hover {
+        background-color: rgb(247, 247, 247);
+      }
       .update-button {
         background-color: transparent;
         border: 0;
