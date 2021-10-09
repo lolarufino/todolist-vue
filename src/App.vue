@@ -1,14 +1,52 @@
 <template>
-  <h1>To Do List</h1>
-  <input type="text" v-model="inputValue" />
-  <button @click="saveValue()">Create task</button>
-  <button>Update task</button>
-  <ul>
-    <li v-for="toDo in toDos">
-      {{ toDo.title
-      }}<button @click="deleteToDoChosen({ title: toDo.title })">X</button>
-    </li>
-  </ul>
+  <div class="wrapper">
+    <h1 class="title">To Do List</h1>
+    <img
+      class="animation"
+      src="https://i.ibb.co/6vdyf8J/39019-completing-taskscompressed.gif"
+      alt="Girl working"
+    />
+    <div class="inputs-wrapper">
+      <input
+        type="text"
+        v-model="inputValue"
+        class="input"
+        placeholder="Write your next task"
+      />
+      <div class="button-wrapper">
+        <button @click="saveValue()" class="button">
+          <img
+            class="button-image"
+            src="https://i.ibb.co/PtRvP47/round-add-button.png"
+            alt="Plus icon to
+          add task"
+          />
+        </button>
+        <button class="button">
+          <img
+            class="button-image"
+            src="https://i.ibb.co/zxJ9Z5Y/update.png"
+            alt="Arrows icon to update task"
+          />
+        </button>
+      </div>
+    </div>
+    <ul class="list">
+      <li v-for="toDo in toDos" class="element-list">
+        {{ toDo.title
+        }}<button
+          @click="deleteToDoChosen({ title: toDo.title })"
+          class="delete-button"
+        >
+          <img
+            class="button-image"
+            src="https://i.ibb.co/Qr9TTcq/delete.png"
+            alt="Garbage container icon to delete task"
+          />
+        </button>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script lang="ts">
@@ -41,4 +79,94 @@ export default defineComponent({
 
 
 <style lang="scss">
+body {
+  background-color: #fdeeea;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: content-box;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .title {
+    color: #7392ff;
+    font-family: "Exo 2", sans-serif;
+    text-align: center;
+    font-size: 60px;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin: 0;
+    border-radius: 50px;
+  }
+  .animation {
+    width: 425px;
+  }
+  .inputs-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    background-color: #7392ff;
+    border-radius: 5px;
+    padding: 20px;
+    width: 300px;
+    margin: 20px;
+    .input {
+      background-color: #7392ff;
+      border: 0;
+      border-bottom: 2px solid #fdeeea;
+      margin: 20px;
+      font-family: "Exo 2", sans-serif;
+      font-size: 15px;
+      color: white;
+      &::placeholder {
+        color: white;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+    .button-wrapper {
+      .button {
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+        .button-image {
+          width: 30px;
+        }
+      }
+    }
+  }
+  .list {
+    font-family: "Exo 2", sans-serif;
+    font-size: 15px;
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    .element-list {
+      display: flex;
+      align-items: center;
+      list-style-type: none;
+      justify-content: space-between;
+      background-color: white;
+      width: 350px;
+      margin: 10px;
+      padding: 20px;
+      color: black;
+      border-radius: 5px;
+      .delete-button {
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+        .button-image {
+          width: 30px;
+        }
+      }
+    }
+  }
+}
 </style>
