@@ -23,7 +23,7 @@
           />
         </button>
         <button
-          @click="updateValue(this.inputValue, this.index)"
+          @click="updateValue(this.inputValue, this.index, this.completed)"
           class="button"
         >
           <img
@@ -38,9 +38,13 @@
       <button class="filter-button" @click="showAll()">
         Show All ({{ this.toDos.length }})</button
       ><button class="filter-button" @click="showNotCompleted()">
-        Not completed ({{ this.notCompletedToDos.length }})</button
-      ><button class="filter-button" @click="showCompleted(toDos)">
-        Completed ({{ this.completedToDos.length }})
+        Not completed ({{ this.toDos.filter((toDo: any) => toDo.completed !== true).length
+
+        }})</button
+      ><button class="filter-button" @click="showCompleted()">
+        Completed ({{ this.toDos.filter((toDo: any) => toDo.completed === true).length
+
+        }})
       </button>
     </div>
     <ul class="list">
@@ -49,7 +53,9 @@
         <button
           class="update-button"
           @click="
-            setInputValue({ title: toDo.title }), setIndex({ id: toDo.id })
+            setInputValue({ title: toDo.title }),
+              setIndex({ id: toDo.id }),
+              setStatus({ completed: toDo.completed })
           "
           :style="getTextDecoration(toDo)"
         >
@@ -76,7 +82,7 @@ import { mapActions, mapState } from "vuex";
 export default defineComponent({
   name: "App",
   computed: {
-    ...mapState(["toDos", "completedToDos", "notCompletedToDos"]),
+    ...mapState(["toDos"]),
   },
   methods: {
     ...mapActions([
@@ -98,10 +104,14 @@ export default defineComponent({
     setIndex(toDoIndex: any) {
       this.index = toDoIndex.id;
     },
-    updateValue(inputValue: string, index: number) {
-      this.updateToDoChosen({ inputValue, index });
+    setStatus(toDoStatus: any) {
+      this.completed = toDoStatus.completed;
+    },
+    updateValue(inputValue: string, index: number, completed: boolean) {
+      this.updateToDoChosen({ inputValue, index, completed });
       this.inputValue = "";
       this.index = null;
+      this.completed = null;
     },
     completeToDo(toDo: any) {
       this.changeStatus({
@@ -118,16 +128,17 @@ export default defineComponent({
       this.toDos = this.toDos;
     },
     showNotCompleted() {
-      this.toDos = this.notCompletedToDos;
+      this.toDos = this.toDos.filter((toDo: any) => toDo.completed !== true);
     },
     showCompleted() {
-      this.toDos = this.completedToDos;
+      this.toDos = this.toDos.filter((toDo: any) => toDo.completed === true);
     },
   },
   data() {
     return {
       inputValue: "",
       index: null,
+      completed: null,
     };
   },
   mounted() {

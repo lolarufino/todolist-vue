@@ -4,14 +4,10 @@ import axios from 'axios';
 export default createStore({
   state: {
     toDos: [{}],
-    completedToDos: [{}],
-    notCompletedToDos: [{}],
   },
   mutations: {
     loadToDos(state, payload){
       state.toDos = payload;
-      state.completedToDos = payload.filter((toDo: any) => toDo.completed === true);
-      state.notCompletedToDos = payload.filter((toDo: any) => toDo.completed !== true);
     },
     addNewToDo(state, payload){
       payload.id = state.toDos.length+1;
@@ -31,7 +27,7 @@ export default createStore({
   actions: {
     async fetchToDos ({commit}): Promise<void>{
       let {data}:any = await axios.get('https://jsonplaceholder.typicode.com/todos');
-      data = data.splice(0, 10);
+      data = data.splice(0, 3);
 
       commit('loadToDos', data);
     },
@@ -43,8 +39,8 @@ export default createStore({
       const chosenToDo = title;
       commit("updateToDos", chosenToDo);
     },
-    async updateToDoChosen ({commit}, {inputValue, index}):Promise<void>{
-      const toDoToUpdate = {title: inputValue, id: index, completed: false};
+    async updateToDoChosen ({commit}, {inputValue, index, completed}):Promise<void>{
+      const toDoToUpdate = {title: inputValue, id: index, completed: completed};
       commit("updateOneToDo", toDoToUpdate);
     },
     async changeStatus ({commit}, {title, completed, index}):Promise<void>{
