@@ -1,14 +1,36 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
 
 export default createStore({
   state: {
-    toDos: [{}],
+    toDos: [
+      {
+      id: 1,
+      title: "Do laundry",
+      completed: false
+    },
+    {
+      id: 2,
+      title: "Clean kitchen",
+      completed: false
+    },
+    {
+      id: 3,
+      title: "Meal preparation",
+      completed: false
+    },
+    {
+      id: 4,
+      title: "Sweeping and mopping the floor",
+      completed: false
+    },
+    {
+      id: 5,
+      title: "Dusting surfaces",
+      completed: false
+    },
+  ],
   },
   mutations: {
-    loadToDos(state, payload){
-      state.toDos = payload;
-    },
     addNewToDo(state, payload){
       payload.id = state.toDos.length+1;
       payload.completed = false;
@@ -21,16 +43,11 @@ export default createStore({
       state.toDos[payload.id-1] = payload;
     },
     updateStatus(state, payload){
-      state.toDos[payload.id-1] = payload;
+      let index = state.toDos.findIndex((toDo) => toDo.id === payload.id);
+      state.toDos[index] = payload;
     }
   },
   actions: {
-    async fetchToDos ({commit}): Promise<void>{
-      let {data}:any = await axios.get('https://jsonplaceholder.typicode.com/todos');
-      data = data.splice(0, 3);
-
-      commit('loadToDos', data);
-    },
     async saveToDo ({commit}, inputValue): Promise<void>{
       const data = {title: inputValue};
       commit("addNewToDo", data);
