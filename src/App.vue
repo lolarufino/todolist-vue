@@ -48,7 +48,7 @@
       </button>
     </div>
     <ul class="list">
-      <li v-for="toDo in toDos" class="element-list">
+      <li v-for="toDo in componentToDos" class="element-list">
         <input type="checkbox" @change="completeToDo(toDo)" />
         <button
           class="update-button"
@@ -86,7 +86,6 @@ export default defineComponent({
   },
   methods: {
     ...mapActions([
-      "fetchToDos",
       "saveToDo",
       "deleteToDoChosen",
       "updateToDoChosen",
@@ -125,13 +124,19 @@ export default defineComponent({
       return { textDecoration };
     },
     showAll() {
-      this.toDos = this.toDos;
+      this.componentToDos = this.toDos;
     },
     showNotCompleted() {
-      this.toDos = this.toDos.filter((toDo: any) => toDo.completed !== true);
+      this.componentToDos = this.toDos;
+      this.componentToDos = this.componentToDos.filter(
+        (toDo: any) => toDo.completed !== true
+      );
     },
     showCompleted() {
-      this.toDos = this.toDos.filter((toDo: any) => toDo.completed === true);
+      this.componentToDos = this.toDos;
+      this.componentToDos = this.componentToDos.filter(
+        (toDo: any) => toDo.completed === true
+      );
     },
   },
   data() {
@@ -139,10 +144,12 @@ export default defineComponent({
       inputValue: "",
       index: null,
       completed: null,
+      componentToDos: [],
     };
   },
   mounted() {
-    this.fetchToDos();
+    this.toDos;
+    this.componentToDos = this.toDos;
   },
 });
 </script>
