@@ -6,27 +6,32 @@ export default createStore({
       {
       id: 1,
       title: "Do laundry",
-      completed: false
+      completed: false,
+      checked: false
     },
     {
       id: 2,
       title: "Clean kitchen",
-      completed: false
+      completed: false,
+      checked: false
     },
     {
       id: 3,
       title: "Meal preparation",
-      completed: false
+      completed: false,
+      checked: false
     },
     {
       id: 4,
       title: "Sweeping and mopping the floor",
-      completed: false
+      completed: false,
+      checked: false
     },
     {
       id: 5,
       title: "Dusting surfaces",
-      completed: false
+      completed: false,
+      checked: false
     },
   ],
   },
@@ -43,25 +48,25 @@ export default createStore({
       state.toDos[payload.id-1] = payload;
     },
     updateStatus(state, payload){
-      let index = state.toDos.findIndex((toDo) => toDo.id === payload.id);
+      const index = state.toDos.findIndex((toDo) => toDo.id === payload.id);
       state.toDos[index] = payload;
     }
   },
   actions: {
-    async saveToDo ({commit}, inputValue): Promise<void>{
+    saveToDo ({commit}, inputValue): void{
       const data = {title: inputValue};
       commit("addNewToDo", data);
     },
-    async deleteToDoChosen ({commit}, {title}):Promise<void>{
+    deleteToDoChosen ({commit}, {title}): void{
       const chosenToDo = title;
       commit("updateToDos", chosenToDo);
     },
-    async updateToDoChosen ({commit}, {inputValue, index, completed}):Promise<void>{
+    updateToDoChosen ({commit}, {inputValue, index, completed}): void{
       const toDoToUpdate = {title: inputValue, id: index, completed: completed};
       commit("updateOneToDo", toDoToUpdate);
     },
-    async changeStatus ({commit}, {title, completed, index}):Promise<void>{
-      const toDoToUpdate = {title: title, completed: !completed, id: index};
+    changeStatus ({commit}, {title, completed, index, checked}): void{
+      const toDoToUpdate = {title: title, completed: !completed, id: index, checked: !checked};
       commit("updateStatus", toDoToUpdate);
     }
   },

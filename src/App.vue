@@ -39,17 +39,19 @@
         Show All ({{ this.toDos.length }})</button
       ><button class="filter-button" @click="showNotCompleted()">
         Not completed ({{ this.toDos.filter((toDo: any) => toDo.completed !== true).length
-
         }})</button
       ><button class="filter-button" @click="showCompleted()">
         Completed ({{ this.toDos.filter((toDo: any) => toDo.completed === true).length
-
         }})
       </button>
     </div>
     <ul class="list">
       <li v-for="toDo in componentToDos" class="element-list">
-        <input type="checkbox" @change="completeToDo(toDo)" />
+        <input
+          type="checkbox"
+          :checked="checkingValue(toDo)"
+          @change="completeToDo(toDo)"
+        />
         <button
           class="update-button"
           @click="
@@ -61,7 +63,9 @@
         >
           {{ toDo.title }}</button
         ><button
-          @click="deleteToDoChosen({ title: toDo.title })"
+          @click="
+            deleteToDoChosen({ title: toDo.title }), deleteToDoComponent()
+          "
           class="delete-button"
         >
           <img
@@ -117,7 +121,11 @@ export default defineComponent({
         title: toDo.title,
         completed: toDo.completed,
         index: toDo.id,
+        checked: toDo.checked,
       });
+    },
+    checkingValue(toDo: any) {
+      return toDo.checked;
     },
     getTextDecoration(toDo: any) {
       const textDecoration = toDo.completed === false ? "none" : "line-through";
@@ -137,6 +145,9 @@ export default defineComponent({
       this.componentToDos = this.componentToDos.filter(
         (toDo: any) => toDo.completed === true
       );
+    },
+    deleteToDoComponent() {
+      this.componentToDos = this.toDos;
     },
   },
   data() {
@@ -163,6 +174,9 @@ body {
   justify-content: space-between;
   align-items: center;
   box-sizing: content-box;
+}
+ul {
+  padding-left: 0px;
 }
 .wrapper {
   display: flex;
